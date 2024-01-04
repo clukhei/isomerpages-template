@@ -1,0 +1,18 @@
+/* sgds-breadcrumb-item::part(label) {
+    color: white;
+}
+
+sgds-breadcrumb-item::part(base) {
+    color: white;
+}
+
+sgds-breadcrumb-item:hover {
+    color: #d6d6d6;
+} */
+:root{
+    --sgds-gutter-x : 3rem;
+}
+
+sgds-mainnav {
+    --mainnav-padding-x : 3rem;
+}
