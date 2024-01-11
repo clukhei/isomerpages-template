@@ -16,3 +16,7 @@ sgds-breadcrumb-item:hover {
 sgds-mainnav {
     --mainnav-padding-x : 3rem;
 }
+sgds-pagination {
+    --pagination-color: #6b4370;
+    --pagination-active-bg-color: #6b4370;
+}

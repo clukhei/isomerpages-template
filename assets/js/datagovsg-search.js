@@ -66,9 +66,10 @@ function databaseSearch(searchTerm, index) {
     fieldArray = remove(data.result.fields, ["_id", "_full_count", "rank"]);
     pageResults = pageResults.concat(splitPages(data.result.records, RESULTS_PER_PAGE));
     datagovsgTotal = data.result.total;
+    console.log({pageResults})
     displayTable(pageResults[currentPageIndex], fieldArray);
     if (!pageResults || pageResults.length <= 1) return;
-    displayPagination(index);
+    displayPagination(index, datagovsgTotal);
   })
     .fail(function () { // Displays no results if the AJAX call fails
       document.getElementById("loading-spinner").style.display = 'none';
@@ -122,27 +123,38 @@ function remove(array, elements) {
 }
 
 // Populate the pagination elements
-function displayPagination(index) {
+function displayPagination(index, totalDataCount) {
   document.querySelector(".pagination").style.display = "flex";
   var pagination = document.getElementById('paginator-pages');
+  var sgdsPagination = document.getElementById("sgds-pagination")
 
-  for (var i = 0; i < pageResults.length; i++) {
-    var ele = document.createElement("span");
-    var text = document.createTextNode(i + 1);
-    ele.appendChild(text);
-    ele.onclick = function () {
-      var index = i;
-      return function (e) {
-        changePage(e.target, index);
-      };
-    }();
-    pagination.appendChild(ele);
-  }
+    sgdsPagination.setAttribute("datalength", totalDataCount)
+    sgdsPagination.setAttribute("currentpage", 1)
+    sgdsPagination.setAttribute("itemsperpage", 10)
+
+  sgdsPagination.addEventListener("sgds-page-change", (event)=> {
+    currentPageIndex = event.detail.currentPage -1;
+    changePage(event.target, currentPageIndex)
+  })
+    // sgdsPaginationContainer.appendChild(sgdsPagination)
+
+  // for (var i = 0; i < pageResults.length; i++) {
+  //   var ele = document.createElement("span");
+  //   var text = document.createTextNode(i + 1);
+  //   ele.appendChild(text);
+  //   ele.onclick = function () {
+  //     var index = i;
+  //     return function (e) {
+  //       changePage(e.target, index);
+  //     };
+  //   }();
+  //   pagination.appendChild(ele);
+  // }
 
   // Initialise selected page and nav arrows
-  setCurrentPage(pagination.childNodes[index]);
-  displayNavArrows(currentPageIndex);
-  setNavArrowHandlers();
+  // setCurrentPage(pagination.childNodes[index]);
+  // displayNavArrows(currentPageIndex);
+  // setNavArrowHandlers();
 }
 
 function changePage(curr, index) {
@@ -151,7 +163,7 @@ function changePage(curr, index) {
     databaseSearch(searchTerm, index);
   }
 
-  changePageUtil(curr, index);
+  // changePageUtil(curr, index);
   displayTable(pageResults[currentPageIndex], fieldArray);
 }
 
